@@ -1,0 +1,41 @@
+<form method="POST">
+    {% csrf_token %}
+    <div class="loginfrm">
+        <div class="logname">
+            <h1>Container Run</h1>
+        </div>
+
+        <div class="row">
+            <input type="text" name="name" placeholder="container name">
+        </div>
+   
+        <div class="row">
+            <input type="text" name="image" placeholder="image name">
+        </div>
+                
+        <div class="row">
+            <!-- here add host port and container port mapping -->
+<!-- also add here user can add multiple port mapping -->
+            <input type="text" name="Hport" placeholder="Host">
+            <input type="text" name="Cport" placeholder="Container">
+
+        </div>
+
+        <div class="row">
+            <!-- here add host voume and container volume mapping -->
+<!-- also add here user can add multiple volume binding -->
+            <input type="text" name="Hvolume" placeholder="Host">
+            <input type="text" name="Cvolume" placeholder="Container">
+
+        </div>
+
+        <div class="row">
+            <p>detach Mode : </p>
+            <input type="checkbox" name="is_detach"> 
+        </div>
+
+        <div class="row">
+            <input type="submit" name="login" value="Request">
+        </div>
+    </div>
+</form>
