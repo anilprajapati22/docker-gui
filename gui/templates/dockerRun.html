@@ -1,3 +1,16 @@
+        <!-- here link of the newly created containers link will come -->
+        <div>
+            {% if container_id %}
+            
+                <p> Container Details :  
+                <a href="{{ container_id }}/"> <b>{{ container_id }}</b> </a>
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
 <form method="POST">
     {% csrf_token %}
     <div class="loginfrm">
@@ -16,6 +29,7 @@
         <div class="row">
             <!-- here add host port and container port mapping -->
 <!-- also add here user can add multiple port mapping -->
+            <p>Port Mapping : </p>
             <input type="text" name="Hport" placeholder="Host">
             <input type="text" name="Cport" placeholder="Container">
 
@@ -24,6 +38,7 @@
         <div class="row">
             <!-- here add host voume and container volume mapping -->
 <!-- also add here user can add multiple volume binding -->
+            <p>Volume Mapping : </p>
             <input type="text" name="Hvolume" placeholder="Host">
             <input type="text" name="Cvolume" placeholder="Container">
 

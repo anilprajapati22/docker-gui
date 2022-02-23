@@ -1,0 +1,30 @@
+<div>
+    {% if msg %}
+    
+        <p>   
+        {{ msg }}
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+{% for key, value in cobj.items  %}
+
+    <p> {{ key }}  :  {{ value }} </p>
+
+{% endfor %}
+
+
+
+<div>
+    {% if container_id %}
+    
+        <p>   
+        <a href="/{{ container_id }}/containerRemove"> <b> Remove {{ container_id }} Container </b> </a>
+        </p>
+
+    {% endif %}
+
+</div>
