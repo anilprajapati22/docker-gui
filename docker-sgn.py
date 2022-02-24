@@ -1,5 +1,4 @@
 import docker
-import docker
 client = docker.from_env() #start connection with docker
 
 try:

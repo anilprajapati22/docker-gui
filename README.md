@@ -7,9 +7,10 @@
 3. Host Port Mapping.
 4. Volume Mapping.
 5. Detach Mode option.
-## Add Node
-## Remove Node
+
 ## Replica Creation
+
+1. Give number of Replicas that user wants.
 
 ## Deploy Web-App on AWS Ec2
 ## user can deploy docker container on cloud
