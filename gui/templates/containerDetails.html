@@ -1,30 +1,55 @@
-<div>
-    {% if msg %}
-    
-        <p>   
-        {{ msg }}
-        </p>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
 
+
+{% block content %}
+
+    <div>
+        {% if msg %}
+        
+            <p>   
+            {{ msg }}
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    {% if cobjs %}
+        
+        <table border="2" > 
+            
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Port Mapping </td>
+                <td>IPAddress</td>
+                <td>Link</td>
+                <td>Remove</td>
+                
+            </tr>
+            {% for c in cobjs %}
+                <tr>
+                    <td>{{c.0}}</td>
+                    <td>{{c.1}}</td>
+                    <td> {{c.3}}  : {{ c.6 }}</td>
+                    <td>{{c.4}}</td>    
+                    <td> <a href="http://localhost:{{ c.3 }}"  target="_blank"> link </a> </td>
+                    <td> <a href="/{{ c.2 }}/containerRemove"> <b>  Remove  </b> </a> </td>
+                    
+                   
+                    
+                </tr>
+            {% endfor %}    
+        </table>
+        
     {% endif %}
 
-</div>
+
+    </br>
+</br>
+{% endblock %}
 
 
-{% for key, value in cobj.items  %}
-
-    <p> {{ key }}  :  {{ value }} </p>
-
-{% endfor %}
-
-
-
-<div>
-    {% if container_id %}
-    
-        <p>   
-        <a href="/{{ container_id }}/containerRemove"> <b> Remove {{ container_id }} Container </b> </a>
-        </p>
-
-    {% endif %}
-
-</div>

@@ -1,4 +1,12 @@
-        <!-- here link of the newly created containers link will come -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+
+
+<!-- here link of the newly created containers link will come -->
         <div>
             {% if container_id %}
             
@@ -23,7 +31,15 @@
         </div>
    
         <div class="row">
-            <input type="text" name="image" placeholder="image name">
+
+            <select name="image" required id="id_Bid">
+                <option value="" selected>Image : </option>
+            {% for image in images %}
+                <option value={{image}}>{{image}}</option>
+            {% endfor %}
+            </select>
+
+            <!-- <input type="text" name="image" placeholder="image name"> -->
         </div>
                 
         <div class="row">
@@ -34,6 +50,9 @@
             <input type="text" name="Cport" placeholder="Container">
 
         </div>
+    </br>
+    </br>
+    </br></br>
 
         <div class="row">
             <!-- here add host voume and container volume mapping -->
@@ -44,13 +63,18 @@
 
         </div>
 
+    </br></br></br>
+
         <div class="row">
             <p>detach Mode : </p>
             <input type="checkbox" name="is_detach"> 
         </div>
-
+    </br>
         <div class="row">
             <input type="submit" name="login" value="Request">
         </div>
     </div>
 </form>
+
+
+{% endblock %}

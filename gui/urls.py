@@ -7,6 +7,6 @@ urlpatterns = [
     path('', views.dockerRun, name='dockerRun'),
     path('<str:container_id>/', views.containerDetails, name='containerDetails'),
     path('<str:container_id>/containerRemove', views.containerRemove, name='containerRemove'),
-    
-    path('', views.index, name='index'),
+    path('containerList', views.containerList, name='containerList'),
+    #path('', views.index, name='index'),
 ]
