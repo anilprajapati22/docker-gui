@@ -17,6 +17,7 @@ def index(request):
     return render(request, 'index.html', context)    
 
 def dockerRun(request):
+    request.session['msg']=""
     if request.method == "GET":
         return render(request=request, template_name="dockerRun.html",context={
             'images' : getImages()
@@ -67,7 +68,8 @@ def dockerRun(request):
             print(sgncontainer.attrs)
             container_id = sgncontainer.id        
             context = { 'container_id' : container_id }
-            return render(request=request, template_name="dockerRun.html",context=context)	            
+            return redirect(containerList)
+            #return render(request=request, template_name="dockerRun.html",context=context)	            
 
         except:
             print("sgnons error")
@@ -105,6 +107,7 @@ def getImages():
 
 def containerRemove(request, container_id):
     # remove container
+    request.session['msg']=""
     cobj=client.containers.get(container_id)
     cobj.kill()
     cobj.remove()
@@ -119,7 +122,7 @@ def containerList(request):
  
 def serviceList(request,msg=None):
     serviceattrs=[ service.attrs for service in client.services.list() ]
-    cobjs = [[d["ID"] , d['Spec']['Name'], d['ID'] , d['Spec']['EndpointSpec']['Ports'][0]['PublishedPort'] , "127.0.0.1" , "" , d['Spec']['EndpointSpec']['Ports'][0]['TargetPort'] , d['Spec']['Mode']['Replicated']['Replicas'] ] for d in serviceattrs ]
+    cobjs = [[d["ID"] , d['Spec']['Name'], d['ID'] , d['Spec']['EndpointSpec']['Ports'][0]['PublishedPort'] , "-" , "" , d['Spec']['EndpointSpec']['Ports'][0]['TargetPort'] , d['Spec']['Mode']['Replicated']['Replicas'] ] for d in serviceattrs ]
     context = { 'services' : serviceattrs , "cobjs" : cobjs , "msg" : request.session['msg'] }
     return render(request=request, template_name="containerDetails.html",context=context)	            
 
