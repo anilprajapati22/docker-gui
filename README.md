@@ -9,7 +9,8 @@
 6. Give number of Replicas that user wants.
     1. based on replica Service or Container will create.
 7. Details page where basic information of container is given.    
-8. scale container after created.
+7. Details page where basic information of service is given.    
+8. scale container after created. (not done)
 ## Deploy Web-App on AWS Ec2
 
 ## user can deploy docker container on cloud
