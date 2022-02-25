@@ -144,3 +144,21 @@ def serviceScale(request):
         print("error in scaling 2")  
         request.session['msg'] = "Error In Scaling 2"   
         return redirect(serviceList)
+
+def pullimages(request):
+    if request.method == "GET":
+        request.session['msg']=""
+        return render(request=request, template_name="pullimages.html",context={ })	
+
+    if request.method == "POST":
+        try:
+            if request.POST['tag']:        
+                client.images.pull(request.POST["image"],tag=request.POST['tag'])
+            else:
+                client.images.pull(request.POST["image"],tag="latest")        
+            return redirect(dockerRun)
+        except:
+            request.session['msg']="error while pulling images"
+            return render(request=request, template_name="pullimages.html",context={
+                'msg': request.session['msg']
+             })	

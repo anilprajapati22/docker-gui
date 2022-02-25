@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+
+
+<div>
+    {% if msg %}
+    
+        <p>   
+        {{ msg }}
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="loginfrm">
+        <div class="logname">
+            <h1>Pull Your Docker Image</h1>
+        </div>
+
+        <div class="row">
+            <input type="text" name="image" placeholder="Image Name">
+        </div>
+   
+        <div class="row">
+            <input type="text" name="tag" placeholder="tag Name">
+        </div>
+                   
+  
+    </br>
+        <div class="row">
+            <input type="submit" name="login" value="Pull">
+        </div>
+    </div>
+</form>
+
+
+{% endblock %}
