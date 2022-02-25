@@ -29,9 +29,6 @@ def dockerRun(request):
         is_detach=False
         #print(request.POST["is_detach"])
         #print(type(request.POST["is_detach"]))
-        if request.POST.get("is_detach"):
-            is_detach=True
-            print(is_detach)
 
         #if user choose multiple replica
         if request.POST.get("replica")  :       
@@ -45,7 +42,6 @@ def dockerRun(request):
                         endpoint_spec = portMapping,
                         )
                 try:
-                    time.sleep(3)
                     created_service.scale(int(request.POST['replica']))
                 except:
                     print("error in scaling")  
@@ -59,7 +55,7 @@ def dockerRun(request):
 
         try:
             sgncontainer = client.containers.run(request.POST["image"], 
-                    detach=is_detach,
+                    detach=True,
                     ports={request.POST["Cport"]+'/tcp':request.POST["Hport"]},
                     tty = True,
                     #volumes=['/home/anil/sem8:/sgn-waf'],
@@ -138,8 +134,12 @@ def serviceScale(request):
     service_id = request.POST['service_id']
 
     cobj=client.services.get(service_id)
+    print("\n\n\n",cobj.id)
     try:
-        cobj.scale(int(request.POST['replica']))
+        scale_count = int(request.POST['scale'])
+        cobj.scale(scale_count)
+        request.session['msg'] = "Scaling Completed"
+        return redirect(serviceList)
     except:
         print("error in scaling 2")  
         request.session['msg'] = "Error In Scaling 2"   
