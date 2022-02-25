@@ -1,4 +1,4 @@
-# docker-gui
+# Deploy Your Container On Cloud.
 
 ## Docker Run
 
@@ -10,7 +10,7 @@
     1. based on replica Service or Container will create.
 7. Details page where basic information of container is given.    
 7. Details page where basic information of service is given.    
-8. scale container after created. (not done)
+8. pull images from docker hub (only public images)
 ## Deploy Web-App on AWS Ec2
 
 ## user can deploy docker container on cloud
