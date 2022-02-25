@@ -4,7 +4,11 @@
 
 
 {% block content %}
-
+<style>
+.table{
+margin-top:5%;
+}
+</style>
     <div>
         {% if msg %}
         
@@ -26,29 +30,30 @@
 
 
     {% if cobjs %}
-        
-        <table border="2" > 
-            
+        <div class="container">
+        <table border="2" class=" table"> 
+            <thead class="table-dark text-center">
             <tr>
-                <td>ID</td>
-                <td>Name</td>
-                <td>Port Mapping </td>
-                <td>IPAddress</td>
-                <td>Link</td>
-                <td>Remove</td>
+                <td scope="col">ID</td>
+                <td scope="col">Name</td>
+                <td scope="col">Port Mapping </td>
+                <td scope="col">IPAddress</td>
+                <td scope="col">Link</td>
+                <td scope="col">Remove</td>
                 {% if services %}
                     <td> Replicas </td>
                     <td> Scale </td>
                 {% endif %}
                 
             </tr>
+            </thead>
             {% for c in cobjs %}
-                <tr>
+                <tr class="text-center">
                     <td>{{c.0}}</td>
                     <td>{{c.1}}</td>
                     <td> {{c.3}}  : {{ c.6 }}</td>
                     <td>{{c.4}}</td>    
-                    <td> <a href="http://localhost:{{ c.3 }}"  target="_blank"> link </a> </td>
+                    <td> <a href="http://localhost:{{ c.3 }}"  target="_blank"> Link </a> </td>
                     {% if services %}
                         <td> <a href="/{{ c.2 }}/serviceRemove"> <b>  Remove  </b> </a> </td>
                     {%else%}
@@ -72,7 +77,7 @@
                 </tr>
             {% endfor %}    
         </table>
-        
+        </div>
     {% endif %}
 
 
@@ -82,5 +87,3 @@
 
 
 {% endblock %}
-
-
