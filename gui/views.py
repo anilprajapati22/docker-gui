@@ -3,6 +3,9 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 import docker
 import time
+from .models import iptableRules,wafdetails
+
+
 client = docker.from_env() #start connection with docker
 
 # Create your views here.
@@ -15,6 +18,28 @@ def sgn(request):
 def index(request):
     context={}
     return render(request, 'index.html', context)    
+
+def getPublicIP():
+    # write here code for getting public ip
+    public_ip = "sgnons"
+    return public_ip
+
+def addWafDetails(container_id):
+    cobjs =  [ container.attrs for container in [client.containers.get(container_id)] ]
+    cobjs = [ [ d['Config']['Hostname'], d['Name'][1:], d['Id'], d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'], d['NetworkSettings']['IPAddress'] , "localhost"+":"+ d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'] , list(d['NetworkSettings']['Ports'].keys())[0] ] for d in cobjs if "container" in d['Name']] 
+
+    waf_obj = wafdetails(
+        container_id =  cobjs[0][2],
+        container_name = cobjs[0][1],
+        container_port = cobjs[0][3],
+        container_ip = cobjs[0][4],
+        public_ip = getPublicIP()
+    )
+    waf_obj.save()
+
+    print("\n\n")
+    print(cobjs,"\n\n")
+
 
 def dockerRun(request):
     request.session['msg']=""
@@ -41,6 +66,7 @@ def dockerRun(request):
                         name=request.POST["name"],
                         endpoint_spec = portMapping,
                         )
+
                 try:
                     created_service.scale(int(request.POST['replica']))
                 except:
@@ -51,19 +77,22 @@ def dockerRun(request):
                 return redirect(serviceList)
 
 
-
-
         try:
+            print("\n\n\n\nsgn\n\n")
             sgncontainer = client.containers.run(request.POST["image"], 
                     detach=True,
                     ports={request.POST["Cport"]+'/tcp':request.POST["Hport"]},
                     tty = True,
-                    #volumes=['/home/anil/sem8:/sgn-waf'],
+                    cap_add = ['NET_ADMIN'],
+                    volumes=['/home/anilprajapati/sem8/:/sgn-waf'],
                     name=request.POST["name"]+"container")
             print(sgncontainer.name) #name of the container
             print(sgncontainer.attrs)
             container_id = sgncontainer.id        
             context = { 'container_id' : container_id }
+
+            addWafDetails(sgncontainer.attrs)
+
             return redirect(containerList)
             #return render(request=request, template_name="dockerRun.html",context=context)	            
 
@@ -84,8 +113,9 @@ def containerDetails(request, container_id ):
     cobj=client.containers.get(container_id)
     cobjs = [ cobj.attrs ]
     #cobjs =  [ container.attrs for container in client.containers.list() ]
-    cobjs = [ [ d['Config']['Hostname'], d['Name'][1:], d['Id'], d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'], d['NetworkSettings']['IPAddress'] , "localhost"+":"+ d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'] , list(d['NetworkSettings']['Ports'].keys())[0] ] for d in cobjs if "container" in d['Name'] ] 
-
+    cobjs = [ [ d['Config']['Hostname'], d['Name'][1:], d['Id'], d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'], d['NetworkSettings']['IPAddress'] , "localhost"+":"+ d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'] , list(d['NetworkSettings']['Ports'].keys())[0] ] for d in cobjs if "container" in d['Name']] 
+    print("\n\n")
+    #print(cobjs.keys(),"\n\n")
     context= {  "cobjs" : cobjs, "cid" : cobj.attrs['Id'][:10] , "container_id"  :  container_id }
     return render(request=request, template_name="containerDetails.html",context=context)
 
@@ -114,6 +144,9 @@ def containerList(request):
     cobjs =  [ container.attrs for container in client.containers.list() ]
     cobjs = [ [ d['Config']['Hostname'], d['Name'][1:], d['Id'], d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'], d['NetworkSettings']['IPAddress'] , "localhost"+":"+ d['NetworkSettings']['Ports'][list(d['NetworkSettings']['Ports'].keys())[0]][0]['HostPort'] , list(d['NetworkSettings']['Ports'].keys())[0] ] for d in cobjs if "container" in d['Name']] 
     context= {  "cobjs" : cobjs }
+    print("\n\n")
+    print(cobjs,"\n\n")
+    
     return render(request=request, template_name="containerDetails.html",context=context)
  
 def serviceList(request,msg=None):
