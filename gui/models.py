@@ -22,6 +22,7 @@ class wafdetails(models.Model):
     container_port = models.CharField(max_length=200)
     container_ip = models.CharField(max_length=200)
     public_ip = models.CharField(max_length=200)
+
 class ons(models.Model):
     question = models.ForeignKey(sgn, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
